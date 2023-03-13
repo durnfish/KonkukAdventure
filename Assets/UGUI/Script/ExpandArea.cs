@@ -8,19 +8,19 @@ public class ExpandArea : MonoBehaviour
     public float expandedSize = 200f;
     public float expandTime = 1f;
 
-    private bool isExpanded = false;
+    private bool _isExpanded = false;
 
-    public void Expand()
+    public void ExpandSize()
     {
-        if (isExpanded)
+        if (_isExpanded)
         {
             StartCoroutine(SmoothResize(uiElement, uiElement.sizeDelta.y, uiElement.sizeDelta.y - expandedSize, expandTime));
-            isExpanded = false;
+            _isExpanded = false;
         }
         else
         {
             StartCoroutine(SmoothResize(uiElement, uiElement.sizeDelta.y, uiElement.sizeDelta.y + expandedSize, expandTime));
-            isExpanded = true;
+            _isExpanded = true;
         }
     }
 

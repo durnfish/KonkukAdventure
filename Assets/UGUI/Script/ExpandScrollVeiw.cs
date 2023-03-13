@@ -6,80 +6,108 @@ public class ExpandScrollVeiw : MonoBehaviour
 {
     public static ExpandScrollVeiw instance;
 
-    [SerializeField] RectTransform view;
-    [SerializeField] internal GameObject[] study = new GameObject[4];
+    [SerializeField] internal GameObject trans;
+    [SerializeField] internal ExpandArea[] study = new ExpandArea[16];
     [SerializeField] internal float area, time;
-    bool isStudy1Expand, isStudy2Expand, isStudy3Expand;
+    private bool _isStudy1Expand, _isStudy2Expand, _isStudy3Expand, _isStudy4Expand;
 
     private void Awake()
     {
         instance = this;
+        study = trans.GetComponentsInChildren<ExpandArea>();
 
-        isStudy1Expand = false;
-        isStudy2Expand = false;
-        isStudy3Expand = false;
+        _isStudy1Expand = false;
+        _isStudy2Expand = false;
+        _isStudy3Expand = false;
+        _isStudy4Expand = false;
     }
     public void ExpandStudy1()
     {
-        if (!isStudy1Expand)
+        if (!_isStudy1Expand)
         {
 
-            for (int i = 1; i < 4; i++)
+            for (int i = 1; i < study.Length; i++)
             {
                 StartCoroutine(SmoothResizeDown(study[i], area, time)) ;
             }
 
-            isStudy1Expand = true;
+            _isStudy1Expand = true;
         }
         else
         {
-            for (int i = 1; i < 4; i++)
+            for (int i = 1; i < study.Length; i++)
             {
                 StartCoroutine(SmoothResizeUp(study[i], area, time)) ;
             }
 
-
-            isStudy1Expand = false;
+            _isStudy1Expand = false;
         }
     }
     public void ExpandStudy2()
     {
-        if (!isStudy2Expand)
+        if (!_isStudy2Expand)
         {
-            for (int i = 2; i < 4; i++)
+            for (int i = 2; i < study.Length; i++)
             {
                 StartCoroutine(SmoothResizeDown(study[i],area,time));
             }
 
-            isStudy2Expand = true;
+            _isStudy2Expand = true;
         }
         else
         {
-            for (int i = 2; i < 4; i++)
+            for (int i = 2; i < study.Length; i++)
             {
                 StartCoroutine(SmoothResizeUp(study[i], area, time));
             }
 
-            isStudy2Expand = false;
+            _isStudy2Expand = false;
         }
     }
     public void ExpandStudy3()
     {
-        if (!isStudy3Expand)
+        if (!_isStudy3Expand)
         {
-            StartCoroutine(SmoothResizeDown(study[3], area, time));
+            for (int i = 3; i < study.Length; i++)
+            {
+                StartCoroutine(SmoothResizeDown(study[i], area, time));
+            }
 
-            isStudy3Expand = true;
+            _isStudy3Expand = true;
         }
         else
         {
-            StartCoroutine(SmoothResizeUp(study[3], area, time)) ;
+            for (int i = 3; i < study.Length; i++)
+            {
+                StartCoroutine(SmoothResizeUp(study[i], area, time));
+            }
 
-            isStudy3Expand = false;
+            _isStudy3Expand = false;
+        }
+    }
+    public void ExpandStudy4()
+    {
+        if (!_isStudy4Expand)
+        {
+            for (int i = 4; i < study.Length; i++)
+            {
+                StartCoroutine(SmoothResizeDown(study[i], area, time));
+            }
+
+            _isStudy4Expand = true;
+        }
+        else
+        {
+            for (int i = 4; i < study.Length; i++)
+            {
+                StartCoroutine(SmoothResizeUp(study[i], area, time));
+            }
+
+            _isStudy4Expand = false;
         }
     }
 
-    IEnumerator SmoothResizeUp(GameObject rt, float area , float time)
+    IEnumerator SmoothResizeUp(ExpandArea rt, float area , float time)
     {
         float t = 0f;
         float temp = rt.transform.position.y;
@@ -93,9 +121,9 @@ public class ExpandScrollVeiw : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator SmoothResizeDown(GameObject rt, float area, float time)
+    IEnumerator SmoothResizeDown(ExpandArea rt, float area, float time)
     {
-        float t = 0f, a = 0;
+        float t = 0f;
         float temp = rt.transform.position.y;
 
         while (t < 1f)
@@ -106,10 +134,5 @@ public class ExpandScrollVeiw : MonoBehaviour
             rt.transform.position = new Vector3(rt.transform.position.x, temp - growSize, rt.transform.position.z);
             yield return null;
         }
-    }
-
-    void WaitTime()
-    {
-
     }
 }

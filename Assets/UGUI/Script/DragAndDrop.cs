@@ -3,35 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    [SerializeField]
+    private Transform _targetTr; // 이동될 UI
 
+    private Vector2 _startingPoint;
+    private Vector2 _moveBegin;
+    private Vector2 _moveOffset;
+
+    private void Awake()
+    {
+        // 이동 대상 UI를 지정하지 않은 경우, 자동으로 부모로 초기화
+        if (_targetTr == null)
+            _targetTr = transform.parent;
     }
 
-    // Update is called once per frame
-    void Update()
+    // 드래그 시작 위치 지정
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
-
+        _startingPoint = _targetTr.position;
+        _moveBegin = eventData.position;
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    // 드래그 : 마우스 커서 위치로 이동
+    void IDragHandler.OnDrag(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
+        _moveOffset = eventData.position - _moveBegin;
+        _targetTr.position = _startingPoint + _moveOffset;
     }
 
 }
